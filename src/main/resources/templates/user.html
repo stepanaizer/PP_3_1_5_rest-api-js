@@ -5,7 +5,9 @@
 </head>
 <body>
 <h1>User, welcome spring boot security page!</h1>
-<a href="/logout">Logout</a>
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="Logout" />
+</form>
 
 </body>
 </html>
