@@ -6,11 +6,17 @@
 </head>
 <body>
 <form th:method="POST" th:action="@{/admin/{id}/edit(id=${user.getId()})}" th:object="${user}">
-    <label for="username">Username:</label>
-    <input th:charset="utf-8" type="text" th:field="*{username}" id="username"/>
+    <label for="firstName">First name:</label>
+    <input th:charset="utf-8" type="text" th:field="*{firstName}" id="firstName"/>
     <br/>
-    <label for="yearOfBirth">Year of birth:</label>
-    <input th:charset="utf-8" type="text" th:field="*{yearOfBirth}" id="yearOfBirth"/>
+    <label for="lastName">Last name:</label>
+    <input th:charset="utf-8" type="text" th:field="*{lastName}" id="lastName"/>
+    <br/>
+    <label for="age">Age:</label>
+    <input th:charset="utf-8" type="text" th:field="*{age}" id="age"/>
+    <br/>
+    <label for="email">Email:</label>
+    <input th:charset="utf-8" type="text" th:field="*{email}" id="email"/>
     <br/>
     <label for="password">Password:</label>
     <input th:charset="utf-8" type="password" th:field="*{password}" id="password"/>

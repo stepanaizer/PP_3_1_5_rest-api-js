@@ -10,16 +10,24 @@
 <table class="table table-dark table-striped table-sm">
   <thead>
   <tr>
-    <th scope="col">Username</th>
+    <th scope="col">id</th>
+    <th scope="col">FirstName</th>
+    <th scope="col">LastName</th>
+    <th scope="col">Age</th>
+    <th scope="col">Email</th>
     <th scope="col">Roles</th>
-    <th scope="col">Year of birth</th>
+
   </tr>
   </thead>
   <tbody>
   <tr th:each="user: ${users}">
-    <td><a th:href="@{admin/{id}(id=${user.getId()})}" th:text="${user.getUsername()}">user</a></td>
+    <td th:text="${user.getId()}"/>
+    <td><a th:href="@{admin/{id}(id=${user.getId()})}" th:text="${user.getFirstName()}">user</a></td>
+    <td th:text="${user.getLastName()}"/>
+    <td th:text="${user.getAge()}"/>
+    <td th:text="${user.getEmail()}"/>
     <td th:text="${user.getAuthorities()}"/>
-    <td th:text="${user.getYearOfBirth()}"/>
+
   </tr>
   </tbody>
 </table>

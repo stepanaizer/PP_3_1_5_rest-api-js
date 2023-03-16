@@ -6,10 +6,13 @@
 </head>
 <body>
 
-<p th:text="${user.getUsername()}">value</p>
-<p th:text="${user.getAuthorities()}">value</p>
-<p th:text="${user.getYearOfBirth()}">value</p>
 <p th:text="${user.getId()}">value</p>
+<p th:text="${user.getFirstName()}">value</p>
+<p th:text="${user.getLastName()}">value</p>
+<p th:text="${user.getAge()}">value</p>
+<p th:text="${user.getEmail()}">value</p>
+<p th:text="${user.getAuthorities()}">value</p>
+
 
 <form th:method="GET" th:action="@{/admin/{id}/edit(id=${user.getId()})}">
     <input type="submit" value="Edit user info"/>

@@ -24,10 +24,10 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         User userFromView = (User) target;
-        Optional<User> userToValidate = userValidationService.findByUsername(userFromView.getUsername());
+        Optional<User> userToValidate = userValidationService.findByEmail(userFromView.getEmail());
 
         if(userToValidate.isPresent()){
-            errors.rejectValue("username","", "Человек с таким именем пользователя уже существует");
+            errors.rejectValue("email","", "Аккаунт с таким адресом эл. почты уже существует");
         }
     }
 }

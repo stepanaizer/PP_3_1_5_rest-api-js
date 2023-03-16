@@ -8,7 +8,7 @@
 
 <form name="f" method="post" action="/process_login">
   <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-  <label for="username">Введите имя пользователя: </label>
+  <label for="username">Введите эл. почту: </label>
   <input type="text" name="username" id="username"/>
   <br/>
   <label for="password">Введите пароль: </label>
@@ -17,7 +17,7 @@
   <input type="submit" value="Login"/>
 
   <div th:if="${param.error}" style="color: red">
-    Неправильные имя или пароль
+    Неправильные адрес эл. почты или пароль
   </div>
 </form>
 

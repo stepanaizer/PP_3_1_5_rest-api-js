@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -22,17 +23,26 @@ public class User implements UserDetails {
 
     @NotEmpty(message = "Имя не должно быть пустым")
     @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
-    @Column(name = "username")
-    private String username;
+    @Column(name = "firstName")
+    private String firstName;
 
-    @Min(value = 1920, message = "Год рождения должен быть больше, чем 1920")
-    @Column(name = "year_of_birth")
-    private int yearOfBirth;
+    @NotEmpty(message = "Имя не должно быть пустым")
+    @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
+    @Column(name = "lastName")
+    private String lastName;
+    @Min(value = 7, message = "Возраст должен быть не менее 7 лет")
+    @Column(name = "age")
+    private int age;
+
+    @NotEmpty(message = "заполните адрес электронной почты")
+    @Email
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -43,17 +53,15 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String username, int yearOfBirth) {
-        this.username = username;
-        this.yearOfBirth = yearOfBirth;
+    public User(String firstName, String lastName, int age, String email) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.age = age;
+        this.email = email;
     }
 
     public void addRole(Role role){
         this.roles.add(role);
-    }
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.roles;
     }
 
     public Long getId() {
@@ -64,20 +72,44 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public int getYearOfBirth() {
-        return yearOfBirth;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public void setYearOfBirth(int yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
     }
 
     public void setRoles(Set<Role> roles) {
@@ -85,13 +117,18 @@ public class User implements UserDetails {
     }
 
     @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return username;
+        return this.getEmail();
     }
 
     @Override
@@ -118,9 +155,10 @@ public class User implements UserDetails {
     public String toString() {
         return "User{" +
                "id=" + id +
-               ", username='" + username + '\'' +
-               ", yearOfBirth=" + yearOfBirth +
-               ", password='" + password + '\'' +
+               ", firstName='" + firstName + '\'' +
+               ", lastName='" + lastName + '\'' +
+               ", age=" + age +
+               ", email='" + email + '\'' +
                '}';
     }
 }

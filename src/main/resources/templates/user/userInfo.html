@@ -4,9 +4,10 @@
     <title>User page</title>
 </head>
 <body>
-
+<p th:text="${user.getFirstName()}">value</p>
+<p th:text="${user.getLastName()}">value</p>
 <p th:text="${user.getUsername()}">value</p>
-<p th:text="${user.getYearOfBirth()}">value</p>
+<p th:text="${user.getAge()}">value</p>
 <p th:text="${user.getId()}">value</p>
 
 <form th:action="@{/logout}" th:method="POST">

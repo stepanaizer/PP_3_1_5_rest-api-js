@@ -40,10 +40,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Role userRole = roleRepository.findByRoleName("ROLE_USER");
 
         User admin;
-        if (userRepository.findByUsername("admin").isEmpty()) {
+        if (userRepository.findByEmail("admin@mail.ru").isEmpty()) {
             admin = new User();
-            admin.setUsername("admin");
-            admin.setYearOfBirth(1921);
+            admin.setFirstName("admin");
+            admin.setLastName("admin");
+            admin.setAge(99);
+            admin.setEmail("admin@mail.ru");
             admin.setPassword(passwordEncoder.encode("admin"));
             admin.addRole(userRole);
             admin.addRole(adminRole);
