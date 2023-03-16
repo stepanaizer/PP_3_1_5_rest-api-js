@@ -5,12 +5,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
 import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
     @Autowired
@@ -25,7 +27,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(user.isEmpty()) {
             throw new UsernameNotFoundException("Пользователь не найден!");
         }
-        //TODO: убедиться, что так будет работать.
         return user.get();
     }
 }

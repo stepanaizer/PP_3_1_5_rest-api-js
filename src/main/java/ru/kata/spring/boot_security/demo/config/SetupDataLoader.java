@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.util;
+package ru.kata.spring.boot_security.demo.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -18,12 +18,12 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    public SetupDataLoader(UserRepository userRepository, RoleRepository roleRepository) {
+    public SetupDataLoader(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
