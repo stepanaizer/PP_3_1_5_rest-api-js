@@ -15,7 +15,7 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
-    @Autowired
+
     public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -27,6 +27,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(user.isEmpty()) {
             throw new UsernameNotFoundException("Пользователь не найден!");
         }
+        user.get().getRoles().size();
+
         return user.get();
     }
 }

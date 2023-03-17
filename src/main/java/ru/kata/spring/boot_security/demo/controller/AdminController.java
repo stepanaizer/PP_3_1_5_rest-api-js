@@ -8,6 +8,7 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.AdminService;
 
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,31 +17,36 @@ import java.util.Set;
 public class AdminController {
     private final AdminService adminService;
 
-    @Autowired
     public AdminController(AdminService adminService) {
         this.adminService = adminService;
     }
 
     @GetMapping()
-    public String printAllUsers(Model model) {
+    public String showAllUsers(Model model) {
         model.addAttribute("users", adminService.findAll());
         return "admin/users";
     }
 
     @GetMapping("/{id}")
-    public String printUser(@PathVariable("id") Long id, Model model) {
+    public String showUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", adminService.findById(id));
         return "admin/user";
     }
 
     @GetMapping("/new")
-    public String newUser(@ModelAttribute("user") User user) {
+    public String newUser(Model model, User user) {
+
+        Set<Role> roles = new HashSet<>(adminService.findAllRoles());
+
+        model.addAttribute("user", user);
+        model.addAttribute("allRoles", roles);
+
         return "admin/new";
     }
 
     @PostMapping()
-    public String addDefaultUser(@ModelAttribute("user") User user) {
-        adminService.addDefaultUser(user);
+    public String addDUser(@ModelAttribute("user") User user) {
+        adminService.addUser(user);
         return "redirect:/admin";
     }
     @GetMapping("/{id}/edit")
