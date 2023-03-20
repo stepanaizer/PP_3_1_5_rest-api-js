@@ -112,6 +112,13 @@ public class User implements UserDetails {
         return roles;
     }
 
+    public String getRolesString() {
+        return roles.toString()
+                .replace("[","")
+                .replace("]","")
+                .replace(",","");
+    }
+
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }

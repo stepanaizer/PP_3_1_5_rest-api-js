@@ -1,7 +1,6 @@
 package ru.kata.spring.boot_security.demo.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +9,6 @@ import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -25,31 +23,30 @@ public class AdminServiceJpaRepoImpl implements AdminService {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
-    public List<User> findAll() {
-        List<User> users = userRepository.findAll();
-        users.stream()
-                .map(User::getRoles)
-                .mapToInt(Collection::size)
-                .sum();
 
-        return users;
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
     public User findById(Long id) {
-        User user = userRepository.findById(id).orElse(null);
-        user.getRoles().size();
-        return user;
+        return userRepository.findById(id).orElse(null);
     }
 
     @Transactional
     public void addUser(User createdUser) {
-        //TODO: в бутстрапе на этапе создания юзера сразу выдавать выбранные роли
         createdUser.setPassword(passwordEncoder.encode(createdUser.getPassword()));
         userRepository.save(createdUser);
     }
+
     @Transactional
     public void updateUser(User updatedUser) {
-        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+
+        String password = updatedUser.getPassword();
+        if(password.isEmpty()) {
+            updatedUser.setPassword(userRepository.findById(updatedUser.getId()).get().getPassword());
+        } else {
+            updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
         userRepository.save(updatedUser);
     }
 

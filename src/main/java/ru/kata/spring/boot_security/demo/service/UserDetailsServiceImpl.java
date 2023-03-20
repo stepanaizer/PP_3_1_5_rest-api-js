@@ -27,7 +27,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(user.isEmpty()) {
             throw new UsernameNotFoundException("Пользователь не найден!");
         }
-        user.get().getRoles().size();
+        System.out.println("Getting user with his roles success -> " + user.get().getRoles());
 
         return user.get();
     }

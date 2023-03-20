@@ -16,6 +16,6 @@ public class UserController {
         model.addAttribute("user", user);
         System.out.println(user);
 
-        return "user/userInfo";
+        return "user/user-page";
     }
 }
