@@ -22,15 +22,15 @@ public class User implements UserDetails {
     private Long id;
 
     @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
+    @Size(min = 2, max = 30, message = "Имя должно быть от 2 до 30 символов")
     @Column(name = "firstName")
     private String firstName;
 
-    @NotEmpty(message = "Имя не должно быть пустым")
-    @Size(min = 2, max = 50, message = "Имя должно быть от 2 до 50 символов")
+    @NotEmpty(message = "Фамилия не должна быть пустой")
+    @Size(min = 2, max = 50, message = "Фамилия должна быть от 2 до 30 символов")
     @Column(name = "lastName")
     private String lastName;
-    @Min(value = 7, message = "Возраст должен быть не менее 7 лет")
+    @Min(value = 0, message = "Возраст должен быть больше 0")
     @Column(name = "age")
     private int age;
 

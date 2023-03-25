@@ -8,8 +8,10 @@ import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.repository.RoleRepository;
 import ru.kata.spring.boot_security.demo.repository.UserRepository;
+import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,7 +31,8 @@ public class AdminServiceJpaRepoImpl implements AdminService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(
+                ()-> new UserNotFoundException("User with id: + " + id + " not found"));
     }
 
     @Transactional
@@ -40,7 +43,7 @@ public class AdminServiceJpaRepoImpl implements AdminService {
 
     @Transactional
     public void updateUser(User updatedUser) {
-
+        System.out.println("USER from JSON has ID: " + updatedUser.getId());
         String password = updatedUser.getPassword();
         if(password.isEmpty()) {
             updatedUser.setPassword(userRepository.findById(updatedUser.getId()).get().getPassword());

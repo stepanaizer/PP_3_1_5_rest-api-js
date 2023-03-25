@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -17,13 +17,14 @@
 <div class="container-fluid">
     <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
+            <a class="navbar-brand" href="#"
+               th:text="${user.getUsername() + ' with roles ' + user.getRolesString()}">Navbar</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDark"
                     aria-controls="navbarDark" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse show  justify-content-end" id="navbarDark">
-                <form class="d-flex">
+                <form class="d-flex" th:method="post" th:action="@{/logout}">
                     <button class="btn text-white-50" type="submit">Logout</button>
                 </form>
             </div>
@@ -61,34 +62,17 @@
                                     <th scope="col">Role</th>
                                 </tr>
                                 </thead>
-                                <tbody id="data">
-
+                                <tbody>
+                                <tr>
+                                    <td th:text="${user.getId()}"></td>
+                                    <td th:text="${user.getFirstName()}"></td>
+                                    <td th:text="${user.getLastName()}"></td>
+                                    <td th:text="${user.getAge()}"></td>
+                                    <td th:text="${user.getEmail()}"></td>
+                                    <td th:text="${user.getRolesString()}"></td>
+                                </tr>
                                 </tbody>
                             </table>
-                            <script>
-                                fetch("http://localhost:8080/userInfo").then(
-                                    res=>{
-                                        res.json().then(
-                                            data=>{
-                                                console.log(data);
-                                                if (data.length > 0){
-                                                    let temp = "";
-                                                    data.forEach((u)=>{
-                                                        temp+="<tr>";
-                                                        temp+="<td>"+u.id+"</td>";
-                                                        temp+="<td>"+u.firstName+"</td>";
-                                                        temp+="<td>"+u.lastName+"</td>";
-                                                        temp+="<td>"+u.age+"</td>";
-                                                        temp+="<td>"+u.email+"</td>";
-                                                        temp+="<td>"+u.role+"</td></tr>";
-                                                    })
-                                                    document.getElementById("data").innerHTML = temp;
-                                                }
-                                            }
-                                        )
-                                    }
-                                )
-                            </script>
                         </div>
                     </div>
                 </div>
