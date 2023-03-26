@@ -4,17 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.service.AdminService;
-import ru.kata.spring.boot_security.demo.util.UserNotCreatedException;
-import ru.kata.spring.boot_security.demo.util.UserNotFoundException;
 
-import javax.validation.Valid;
+
+
 import java.util.List;
 
 @RestController
@@ -24,6 +20,14 @@ public class AdminRESTController {
 
     public AdminRESTController(AdminService adminService) {
         this.adminService = adminService;
+    }
+
+    @GetMapping("/user")
+    public User showUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        System.out.println(user);
+        return user;
     }
 
     @GetMapping("/{id}")
@@ -42,17 +46,12 @@ public class AdminRESTController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<HttpStatus> addUser(@RequestBody @Valid User user, BindingResult bindingResult) {
-
-        checkValidationErrors(bindingResult);
-
+    public ResponseEntity<HttpStatus> addUser(@RequestBody User user) {
         adminService.addUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
     @PutMapping("/{id}/edit")
-    public ResponseEntity<HttpStatus> updateUser(@RequestBody @Valid User user, BindingResult bindingResult) {
-
-        checkValidationErrors(bindingResult);
+    public ResponseEntity<HttpStatus> updateUser(@RequestBody User user) {
         adminService.updateUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
@@ -63,28 +62,4 @@ public class AdminRESTController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @ExceptionHandler
-    private ResponseEntity<String> catchUserNotFoundException(UserNotFoundException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler
-    private ResponseEntity<String> catchUserNotCreatedException(UserNotCreatedException e) {
-        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-    }
-
-    private void checkValidationErrors(BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            StringBuilder errorMsg = new StringBuilder();
-
-            List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error : errors) {
-                errorMsg.append(error.getField())
-                        .append(" - ").append(error.getDefaultMessage())
-                        .append("; ");
-            }
-
-            throw new UserNotCreatedException(errorMsg.toString());
-        }
-    }
 }

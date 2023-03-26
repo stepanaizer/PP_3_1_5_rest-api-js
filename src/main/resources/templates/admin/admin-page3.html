@@ -34,9 +34,9 @@
             <br/>
             <div class="align-content-md-stretch">
                 <div class="nav flex-column nav-pills md-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" href="#v-pills-home"
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
                        role="tab" aria-controls="v-pills-home" aria-selected="true">Admin</a>
-                    <a class="nav-link" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile"
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
                        role="tab" aria-controls="v-pills-profile" aria-selected="false">User</a>
                 </div>
             </div>
@@ -51,11 +51,11 @@
                     </div>
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab"
+                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
                                aria-controls="home" aria-selected="true">Users table</a>
                         </li>
                         <li class="nav-item" role="presentation">
-                            <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab"
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab"
                                aria-controls="profile" aria-selected="false">New user</a>
                         </li>
                     </ul>
@@ -84,64 +84,50 @@
                                 </div>
                             </div>
                         </div>
-                        <!---------------------NEW USER TAB-------------------------------
+                        <!-------------NEW USER-->
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                            -- вкладка создания юзера --
                             <div class="card">
                                 <h3 class="card-header"> Create user</h3>
                                 <div class="card-body">
                                     <div class="container mt-2 col-sm-4 text-center">
-                                        <form th:action="@{/admin}" th:method="POST" th:object="${newUser}">
+                                        <form id="newUserForm">
                                             <div class="form-group">
                                                 <label for="firstName" class="font-weight-bold">First name</label>
-                                                <input type="text" class="form-control"
-                                                       id="firstName" name="firstName" th:field="${newUser.firstName}"
-                                                       required>
+                                                <input type="text" class="form-control" id="firstName" name="firstName" required>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="lastName" class="font-weight-bold">Last name</label>
-                                                <input type="text" class="form-control"
-                                                       id="lastName" name="lastName" th:field="${newUser.lastName}"
-                                                       required>
+                                                <input type="text" class="form-control" id="lastName" name="lastName" required>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="age" class="font-weight-bold">Age</label>
-                                                <input type="number" class="form-control"
-                                                       id="age" name="age" th:field="${newUser.age}" required>
+                                                <input type="number" class="form-control" id="age" name="age" required>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="setEmail" class="font-weight-bold">Email</label>
                                                 <input type="email" class="form-control"
-                                                       id="setEmail" name="email" th:field="${newUser.email}" required>
+                                                       id="setEmail" name="email" required>
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="setPassword" class="font-weight-bold">Password</label>
-                                                <input type="password" class="form-control"
-                                                       id="setPassword" name="password" th:field="${newUser.password}">
+                                                <input type="password" class="form-control" id="setPassword" name="password">
                                             </div>
-
                                             <div class="form-group">
                                                 <label for="addRoles" class="font-weight-bold">Role</label>
-                                                <select class="form-select" th:field="*{roles}" id="addRoles" multiple>
-                                                    <option th:each="role: ${allRoles}"
-                                                            th:value="${role.getId()}"
-                                                            th:text="${role.toString()}">Role
+                                                <select class="form-select" id="addRoles" multiple>
+                                                    <option>Role
                                                     </option>
                                                 </select>
                                             </div>
-                                            <button type="submit" class="btn btn-success">Add new user</button>
+                                            <button type="submit" class="btn btn-success" id="newUserBtn">Add new user</button>
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                        </div> ----->
+                        </div> 
                     </div>
                 </div>
-                <!--------------------------AUTHENTICATED USER PAGE-------------------------
+                <!--------------------------AUTHENTICATED USER PAGE------------------------->
                 <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                     <div class="page-header">
                         <h2>User information-page</h2>
@@ -149,7 +135,7 @@
                     <div class="card">
                         <h5 class="card-header">About user</h5>
                         <div class="card-body">
-                            <table class="table table-striped table-sm">
+                            <table class="table table-striped table-sm" id="authTable">
                                 <thead>
                                 <tr>
                                     <th scope="col">ID</th>
@@ -161,20 +147,13 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
-                                    <td th:text="${user.getId()}"></td>
-                                    <td th:text="${user.getFirstName()}"></td>
-                                    <td th:text="${user.getLastName()}"></td>
-                                    <td th:text="${user.getAge()}"></td>
-                                    <td th:text="${user.getEmail()}"></td>
-                                    <td th:text="${user.getRolesString()}"></td>
-                                </tr>
+                
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                </div> ----->
+                </div> 
                 <div class="modal fade" id="someDefaultModal" tabindex="-1" role="dialog" aria-labelledby="someDefaultModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
