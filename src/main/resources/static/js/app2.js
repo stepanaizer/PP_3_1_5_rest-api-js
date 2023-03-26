@@ -22,7 +22,6 @@ const userFetchService = {
 }
    
 
-
 async function getTableWithUsers() {
     let table = $('#usersTable tbody');
     table.empty();
@@ -101,13 +100,16 @@ async function getDefaultModal() {
         keyboard: true,
         backdrop: "static",
         show: false
-    }).on("show.bs.modal", (event) => {
-        let thisModal = $(event.target);
+    }).on("show.bs.modal", async (event) => {
+        let thisModal = $(event.target);    
+
+        let roles = await userFetchService.findAllRoles().then((res) => res.json());
+        
         let userid = thisModal.attr('data-userid');
         let action = thisModal.attr('data-action');
         switch (action) {
             case 'edit':
-                editUser(thisModal, userid);
+                editUser(thisModal, userid, roles);
                 break;
             case 'delete':
                 deleteUser(thisModal, userid);
@@ -123,7 +125,7 @@ async function getDefaultModal() {
 
 
 // редактируем юзера из модалки редактирования, забираем данные, отправляем
-async function editUser(modal, id) {
+async function editUser(modal, id, roles) {
     let userToJson = await userFetchService.findOneUser(id);
     let user = userToJson.json();
 
@@ -162,15 +164,25 @@ async function editUser(modal, id) {
                     <input id="password" name="password" type="password" class="form-control">
                 </div>
                 <div class="mb-3">
-                    <label for="roles" class="col-form-label">Roles:</label>
-                    <select id="roles" name="roles" class="form-select" multiple>
-                        <option>1</option>
-                        <option>2</option>
+                    <label for="selectRoles" class="col-form-label">Roles:</label>
+                    <select id="selectRoles" name="roles" class="form-select" multiple>
+                        
                     </select>
                 </div>
             </form>
         `;
         modal.find('.modal-body').append(bodyForm);
+        
+    
+        $.each(roles, function(i, item) {   
+            roleName = item.roleName.replace(/ROLE_/g, "");
+            $('#selectRoles').append($('<option>', { 
+                value: item.id,
+                text : roleName
+            }));
+        });
+        
+
     })
 
     $("#editButton").on('click', async () => {
@@ -180,7 +192,8 @@ async function editUser(modal, id) {
         let age = modal.find('input[name="age"]').val().trim();
         let email = modal.find('input[name="email"]').val().trim();
         let password = modal.find('input[name="password"]').val().trim();
-        
+        let selectedValues = $('#selectRoles').val();
+                    
         let data = {
             id: id,
             firstName: firstName,
@@ -188,14 +201,9 @@ async function editUser(modal, id) {
             age: age,
             email: email,
             password: password,
-            roles: [
-                {
-                    id: 2,
-                    roleName: "ROLE_USER",
-                    authority: "ROLE_USER"
-                }
-            ]
+            roles: getSelectedRoles(selectedValues,roles)
         }
+
         const response = await userFetchService.updateUser(data, id);
 
         if (response.ok) {
@@ -213,6 +221,21 @@ async function editUser(modal, id) {
         }
     })
 }
+
+function getSelectedRoles(selectedValues, roles){
+    let rolesSelected = [];
+    
+    roles.forEach(role => {
+        for(const value of selectedValues){
+            if(value === role.id.toString()) {
+                rolesSelected.push(role);
+            }
+        }
+    })
+    return rolesSelected;
+}
+
+
 
 
 async function deleteUser(modal, id) {
@@ -276,12 +299,14 @@ async function deleteUser(modal, id) {
 
 
 async function addNewUser() {
-    $('#newUserBtn').click( async () => {
+    $('#newUserBtn').click( async (event) => {
+        event.preventDefault();
+
         let addUserForm = $('#newUserForm');
         let firstName = addUserForm.find('#firstName').val().trim();
         let lastName = addUserForm.find('#lastName').val().trim();
         let age = addUserForm.find('#age').val().trim();
-        let email = addUserForm.find('#email').val().trim();
+        let email = addUserForm.find('#setEmail').val().trim();
         let password = addUserForm.find('#setPassword').val().trim();
         
         let data = {
@@ -300,8 +325,11 @@ async function addNewUser() {
         }
         
         const response = await userFetchService.addNewUser(data);
+        
         if (response.ok) {
             getTableWithUsers();
+
+            $('#myTab a[href="#home"]').tab('show');
             addUserForm.find("#firstName").val('');
             addUserForm.find("#lastName").val('');
             addUserForm.find("#age").val('');
