@@ -15,10 +15,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class AdminRESTController {
+public class RESTController {
     private final AdminService adminService;
 
-    public AdminRESTController(AdminService adminService) {
+    public RESTController(AdminService adminService) {
         this.adminService = adminService;
     }
 

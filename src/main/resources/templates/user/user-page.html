@@ -1,31 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="webjars/bootstrap/4.5.3/css/bootstrap.min.css" rel="stylesheet">
 
-    <title>User page</title>
+    <title>Admin panel</title>
 </head>
 <body>
-<!---------------------HEADER------------------------------->
 
+<!---------------------HEADER------------------------------->
 <div class="container-fluid">
     <nav class="navbar navbar-expand-xl navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDark"
+            <a class="navbar-brand" href="#" id="userInfo"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarDark"
                     aria-controls="navbarDark" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse show  justify-content-end" id="navbarDark">
-                <form class="d-flex">
-                    <button class="btn text-white-50" type="submit">Logout</button>
+                <form class="d-flex" id="logoutForm" method="post" action="/logout">
+
                 </form>
+
             </div>
         </div>
     </nav>
@@ -35,7 +35,7 @@
             <br/>
             <div class="align-content-md-stretch">
                 <div class="nav flex-column nav-pills md-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link active" id="v-pills-profile-tab" data-bs-toggle="pill" href="#v-pills-profile"
+                    <a class="nav-link active" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile"
                        role="tab" aria-controls="v-pills-profile" aria-selected="false">User</a>
                 </div>
             </div>
@@ -43,53 +43,39 @@
         </div>
         <div class="col-10">
             <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    <div class="page-header">
-                        <h2>User information-page</h2>
-                    </div>
-                    <div class="card">
-                        <h5 class="card-header">About user</h5>
-                        <div class="card-body">
-                            <table class="table table-striped table-sm">
-                                <thead>
-                                <tr>
-                                    <th scope="col">ID</th>
-                                    <th scope="col">First Name</th>
-                                    <th scope="col">Last Name</th>
-                                    <th scope="col">Age</th>
-                                    <th scope="col">Email</th>
-                                    <th scope="col">Role</th>
-                                </tr>
-                                </thead>
-                                <tbody id="data">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                     aria-labelledby="v-pills-home-tab">
+                    <div class="tab-content" id="myTabContent">
+                        <!--------------------------AUTHENTICATED USER PAGE------------------------->
+                        <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                             aria-labelledby="v-pills-profile-tab">
+                            <div class="page-header">
+                                <h2>User information-page</h2>
+                            </div>
+                            <div class="card">
+                                <h5 class="card-header">About user</h5>
+                                <div class="card-body">
+                                    <table class="table table-striped table-sm" id="authTable">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">First Name</th>
+                                            <th scope="col">Last Name</th>
+                                            <th scope="col">Age</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Role</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
 
-                                </tbody>
-                            </table>
-                            <script>
-                                fetch("http://localhost:8080/userInfo").then(
-                                    res=>{
-                                        res.json().then(
-                                            data=>{
-                                                console.log(data);
-                                                if (data.length > 0){
-                                                    let temp = "";
-                                                    data.forEach((u)=>{
-                                                        temp+="<tr>";
-                                                        temp+="<td>"+u.id+"</td>";
-                                                        temp+="<td>"+u.firstName+"</td>";
-                                                        temp+="<td>"+u.lastName+"</td>";
-                                                        temp+="<td>"+u.age+"</td>";
-                                                        temp+="<td>"+u.email+"</td>";
-                                                        temp+="<td>"+u.role+"</td></tr>";
-                                                    })
-                                                    document.getElementById("data").innerHTML = temp;
-                                                }
-                                            }
-                                        )
-                                    }
-                                )
-                            </script>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
+
+                        <!-----------END OF header container------------>
                     </div>
                 </div>
             </div>
@@ -97,12 +83,13 @@
     </div>
 </div>
 
-<!-- Option 2: Separate Popper and Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
-        crossorigin="anonymous"></script>
+
+            <!-- Option 2: Separate Popper and Bootstrap JS -->
+
+            <script src="webjars/jquery/3.5.1/jquery.js"></script>
+            <script src="webjars/popper.js/1.16.0/umd/popper.js"></script>
+            <script src="webjars/bootstrap/4.5.3/js/bootstrap.min.js"></script>
+            <script src="/js/app.js"></script>
+
 </body>
 </html>

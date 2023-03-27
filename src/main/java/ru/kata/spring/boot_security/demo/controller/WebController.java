@@ -13,6 +13,6 @@ public class WebController {
 
     @GetMapping("/admin")
     public String getAdminPage() {
-        return "admin/admin-page3";
+        return "admin/admin-page";
     }
 }
