@@ -15,13 +15,13 @@ const userFetchService = {
         'Content-Type': 'application/json',
         'Referer': null
     },
-    findAllRoles: async () => await fetch('api/roles'),
+    findAllRoles: async () => await fetch('/api/users/roles'),
     findAllUsers: async () => await fetch('api/users'),
-    findAuthUser: async () => await fetch('api/user'),
-    findOneUser: async (id) => await fetch(`api/${id}`),
-    addNewUser: async (user) => await fetch('api/new', {method: 'POST', headers: userFetchService.head, body: JSON.stringify(user)}),
-    updateUser: async (user, id) => await fetch(`api/${id}/edit`, {method: 'PUT', headers: userFetchService.head, body: JSON.stringify(user)}),
-    deleteUser: async (id) => await fetch(`api/${id}/delete`, {method: 'DELETE', headers: userFetchService.head})
+    findAuthUser: async () => await fetch('api/users/im'),
+    findOneUser: async (id) => await fetch(`/api/users/${id}`),
+    addNewUser: async (user) => await fetch('/api/users', {method: 'POST', headers: userFetchService.head, body: JSON.stringify(user)}),
+    updateUser: async (user) => await fetch(`/api/users`, {method: 'PUT', headers: userFetchService.head, body: JSON.stringify(user)}),
+    deleteUser: async (id) => await fetch(`/api/users/${id}`, {method: 'DELETE', headers: userFetchService.head})
 }
 
 
@@ -203,7 +203,7 @@ async function editUser(modal, id, roles) {
             roles: getSelectedRoles(selectedValues,roles)
         }
 
-        const response = await userFetchService.updateUser(data, id);
+        const response = await userFetchService.updateUser(data);
 
         if (response.ok) {
             getTableWithUsers();

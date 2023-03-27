@@ -2,8 +2,7 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
@@ -14,7 +13,7 @@ import ru.kata.spring.boot_security.demo.service.AdminService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class RESTController {
     private final AdminService adminService;
 
@@ -22,44 +21,44 @@ public class RESTController {
         this.adminService = adminService;
     }
 
-    @GetMapping("/user")
-    public User showUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        System.out.println(user);
-        return user;
+    @GetMapping("/im")
+    public ResponseEntity<User> getAuthenticatedUser(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok()
+                .body(user);
     }
 
     @GetMapping("/{id}")
-    public User findUser(@PathVariable("id") Long id) {
-        return adminService.findById(id);
+    public ResponseEntity<User> findUser(@PathVariable Long id) {
+        return ResponseEntity.ok()
+                .body(adminService.findById(id));
     }
 
-    @GetMapping("/users")
-    public List<User> findAllUsers() {
-        return adminService.findAll();
+    @GetMapping()
+    public ResponseEntity<List<User>> findAllUsers() {
+        return ResponseEntity.ok()
+                .body(adminService.findAll());
     }
 
     @GetMapping("/roles")
-    public List<Role> findAllRoles() {
-        return adminService.findAllRoles();
+    public ResponseEntity<List<Role>> findAllRoles() {
+        return ResponseEntity.ok()
+                .body(adminService.findAllRoles());
     }
 
-    @PostMapping("/new")
+    @PostMapping()
     public ResponseEntity<HttpStatus> addUser(@RequestBody User user) {
         adminService.addUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-    @PutMapping("/{id}/edit")
+    @PutMapping()
     public ResponseEntity<HttpStatus> updateUser(@RequestBody User user) {
         adminService.updateUser(user);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}/delete")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
         adminService.deleteUserById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
 }
