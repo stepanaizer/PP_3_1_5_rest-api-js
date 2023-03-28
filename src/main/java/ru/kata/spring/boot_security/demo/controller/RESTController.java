@@ -28,7 +28,7 @@ public class RESTController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> findUser(@PathVariable Long id) {
+    public ResponseEntity<User> findUser(@PathVariable("id") Long id) {
         return ResponseEntity.ok()
                 .body(adminService.findById(id));
     }
@@ -56,8 +56,8 @@ public class RESTController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable Long id) {
+    @DeleteMapping()
+    public ResponseEntity<HttpStatus> deleteUser(@RequestParam("id") Long id) {
         adminService.deleteUserById(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
